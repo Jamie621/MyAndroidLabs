@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Jungmin\'s Android Labs</string>
-    <string name="hello_message">안녕 세상!</string>
-    <string name="button_message">나는 버튼입니다.</string>
+    <resources>
+        <string name="app_name">Jungmin\'s Android Labs</string>
 
-</resources>
+        <string name="button1">버튼 1</string>
+        <string name="button2">버튼 2</string>
+        <string name="button3">버튼 3</string>
+    <string name="spin_message">국기 회전</string>
+    </resources>
+
