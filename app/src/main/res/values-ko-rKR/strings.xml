@@ -5,6 +5,7 @@
         <string name="button1">버튼 1</string>
         <string name="button2">버튼 2</string>
         <string name="button3">버튼 3</string>
+        <string name="button4">버튼 4</string>
     <string name="spin_message">국기 회전</string>
     </resources>
 
