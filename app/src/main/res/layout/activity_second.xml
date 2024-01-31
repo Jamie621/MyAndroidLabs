@@ -7,10 +7,10 @@
     tools:context=".SecondActivity">
 
     <TextView
-        android:id="@+id/topTextView"
+        android:id="@+id/textViewTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Top Text View"
+        android:text="TextView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,31 +22,39 @@
         android:layout_height="wrap_content"
         android:hint="Phone Number"
         android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/textViewTop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/callButton"
-        app:layout_constraintTop_toBottomOf="@id/topTextView" />
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <Button
         android:id="@+id/callButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Call Number"
+        app:layout_constraintTop_toBottomOf="@id/textViewTop"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/phoneEditText"
-        app:layout_constraintTop_toBottomOf="@id/topTextView" />
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <ImageView
         android:id="@+id/cameraImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
-        app:layout_constraintTop_toBottomOf="@id/phoneEditText" />
+        app:layout_constraintTop_toBottomOf="@id/phoneEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/changePictureButton"
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <Button
         android:id="@+id/changePictureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Change Picture"
+        app:layout_constraintTop_toBottomOf="@id/callButton"
         app:layout_constraintStart_toEndOf="@id/cameraImageView"
-        app:layout_constraintTop_toBottomOf="@id/callButton" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
