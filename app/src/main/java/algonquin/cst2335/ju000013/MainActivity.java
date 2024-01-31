@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+//    private static final String EMAIL_KEY = "EmailAddress";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
