@@ -42,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 nextPage.putExtra( "EmailAddress", emailEditText.getText().toString());
                 startActivity(nextPage);
 
-// In FirstActivity, sending data
-//                Intent next = new Intent(FirstPage.this, NextPage.class);
-//                next.putExtra("Age", 30); // Assuming you want to pass the age as an int
-//                next.putExtra("Name", "Jason"); // Passing a String
-//                next.putExtra("PostalCode", "12345"); // Another String
-//                startActivity(next);
-
             }
         });
 
