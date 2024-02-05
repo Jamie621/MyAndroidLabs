@@ -2,7 +2,17 @@
     <string name="app_name">Jungmin\'s Android Labs</string>
     <string name="email_hint">Enter your email address</string>
     <string name="password_hint">Enter your password</string>
+    <string name="password_label">Type your password:</string>
+
     <string name="login_button">Login</string>
     <string name="welcome_back">Welcome back, %1$s!</string>
+    <string name="email_label">Enter your email address:</string>
+    <string name="hello_message">Hello world!</string>
+    <string name="welcome_message">Welcome back %1$s</string>
+    <string name="phone_number_hint">Phone Number</string>
+    <string name="call_number">Call Number</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="change_picture">Change Picture</string>
+
     <!-- Add other strings here -->
 </resources>

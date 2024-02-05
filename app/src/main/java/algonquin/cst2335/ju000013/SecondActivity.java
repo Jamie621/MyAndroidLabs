@@ -1,7 +1,6 @@
 package algonquin.cst2335.ju000013;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,33 +26,29 @@ public class SecondActivity extends AppCompatActivity {
     private static final String IMAGE_FILE_NAME = "profile_picture.png";
     private ActivityResultLauncher<Intent> cameraResultLauncher;
     private ImageView cameraImageView;
-    private EditText phoneEditText;
-    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         cameraImageView = findViewById(R.id.cameraImageView);
-        phoneEditText = findViewById(R.id.phoneEditText);
         loadProfileImage();
 
         Intent fromPrevious = getIntent();
-        String emailAddress = fromPrevious.getStringExtra(MainActivity.EMAIL_KEY);
-        TextView textViewTop = findViewById(R.id.textViewTop);
-        textViewTop.setText(getString(R.string.welcome_back, emailAddress));
-
-        String phoneNumber = prefs.getString("PhoneNumber", "");
-        phoneEditText.setText(phoneNumber);
+        if (fromPrevious != null) {
+            String emailAddress = fromPrevious.getStringExtra(MainActivity.EMAIL_KEY);
+            TextView textViewTop = findViewById(R.id.textViewTop);
+            textViewTop.setText("Welcome back " + emailAddress);
+        }
 
         Button callButton = findViewById(R.id.callButton);
         callButton.setOnClickListener(v -> {
-            String phone = phoneEditText.getText().toString();
+            EditText phoneEditText = findViewById(R.id.phoneEditText);
+            String phoneNumber = phoneEditText.getText().toString();
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            if (!phone.isEmpty()) {
-                callIntent.setData(Uri.parse("tel:" + phone));
+            if (!phoneNumber.isEmpty()) {
+                callIntent.setData(Uri.parse("tel:" + phoneNumber));
                 startActivity(callIntent);
             }
         });
@@ -74,21 +69,14 @@ public class SecondActivity extends AppCompatActivity {
                             }
                         }
                     }
-                });
+                }
+        );
 
         Button changePictureButton = findViewById(R.id.changePictureButton);
         changePictureButton.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraResultLauncher.launch(cameraIntent);
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("PhoneNumber", phoneEditText.getText().toString());
-        editor.apply();
     }
 
     private void loadProfileImage() {
