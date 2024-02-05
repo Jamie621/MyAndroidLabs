@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.JungminsAndroidLabs"
         tools:targetApi="31">
+
         <activity
             android:name=".SecondActivity"
             android:exported="false" />
