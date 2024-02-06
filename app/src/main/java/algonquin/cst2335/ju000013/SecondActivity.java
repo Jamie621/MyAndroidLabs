@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -77,6 +78,21 @@ public class SecondActivity extends AppCompatActivity {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraResultLauncher.launch(cameraIntent);
         });
+
+        // Detect long-press gesture on the profile picture
+        cameraImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // Clear the saved profile image (delete the image file)
+                clearProfileImage();
+
+                // Display the default picture (e.g., a placeholder image)
+                cameraImageView.setImageResource(R.drawable.ic_menu_camera); // Replace with your default image resource
+
+                // Return true to consume the long-press event
+                return true;
+            }
+        });
     }
 
     private void loadProfileImage() {
@@ -94,6 +110,14 @@ public class SecondActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // Method to clear the saved profile image (delete the image file)
+    private void clearProfileImage() {
+        File file = new File(getFilesDir(), IMAGE_FILE_NAME);
+        if (file.exists()) {
+            file.delete();
         }
     }
 }
