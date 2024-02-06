@@ -87,7 +87,7 @@ public class SecondActivity extends AppCompatActivity {
                 clearProfileImage();
 
                 // Display the default picture (e.g., a placeholder image)
-                cameraImageView.setImageResource(R.drawable.ic_menu_camera); // Replace with your default image resource
+                cameraImageView.setImageResource(R.drawable.ic_menu_camera); // Replace default image resource
 
                 // Return true to consume the long-press event
                 return true;
