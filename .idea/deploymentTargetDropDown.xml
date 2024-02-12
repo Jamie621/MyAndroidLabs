@@ -3,6 +3,34 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="app">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\jujun\.android\avd\Pixel_2_API_27.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-02-12T14:21:56.205945200Z" />
+        </State>
+      </entry>
+      <entry key="testFindMissingDigit()">
+        <State />
+      </entry>
+      <entry key="testFindMissingLowerCase()">
+        <State />
+      </entry>
+      <entry key="testFindMissingSpecialCharacter()">
+        <State />
+      </entry>
+      <entry key="testFindMissingUpperCase()">
+        <State />
+      </entry>
+      <entry key="testPasswordIsComplexEnough()">
         <State />
       </entry>
     </value>
