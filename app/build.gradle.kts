@@ -37,7 +37,6 @@ dependencies {
 //    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 //    implementation(fileTree(mapOf("dir" to "C:\\Users\\jujun\\AppData\\Local\\Android\\Sdk\\platforms\\android-34", "include" to listOf("*.aar", "*.jar"), "exclude" to listOf())))
 //    implementation(fileTree(mapOf("dir" to "C:\\Users\\jujun\\AppData\\Local\\Android\\Sdk\\platforms\\android-32", "include" to listOf("*.aar", "*.jar"), "exclude" to listOf())))
-    implementation(fileTree("dir" to "libs", "include" to listOf("*.jar")))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
