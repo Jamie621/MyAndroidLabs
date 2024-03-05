@@ -1,5 +1,8 @@
 package algonquin.cst2335.ju000013;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -103,10 +106,9 @@ public class ChatRoom extends AppCompatActivity {
 
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
 
-        ArrayList<ChatMessage> messages = chatModel.messages.getValue();
+        final ArrayList<ChatMessage> messages = chatModel.messages.getValue(); // Declare as final
         if (messages == null) {
-            messages = new ArrayList<>();
-            chatModel.messages.postValue(messages); // Use postValue for background thread if necessary
+            chatModel.messages.postValue(new ArrayList<>()); // Use postValue for background thread if necessary
         }
 
         myAdapter = new ChatAdapter(messages);
@@ -148,8 +150,8 @@ public class ChatRoom extends AppCompatActivity {
 
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
-            messageText = itemView.findViewById(R.id.message_text);
-            timeText = itemView.findViewById(R.id.time_text);
+            messageText = itemView.findViewById(R.id.message); // Correct ID
+            timeText = itemView.findViewById(R.id.time); // Correct ID
         }
     }
 
