@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/receive_button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Background color for the button -->
+    <solid android:color="#FF5722" /> <!-- You can change the color value as needed -->
+
+    <!-- Corner radius for rounded corners -->
+    <corners android:radius="8dp" /> <!-- You can adjust the radius as needed -->
+
+</shape>
