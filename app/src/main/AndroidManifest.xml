@@ -12,7 +12,14 @@
         android:theme="@style/Base.Theme.JungminsAndroidLabs"
         tools:targetApi="31">
         <activity
+            android:name=".receive_message"
+            android:exported="false" />
+        <!-- Remove the intent-filter from MainActivity -->
+        <activity
             android:name=".MainActivity"
+            android:exported="true" /> <!-- Update the ChatRoom activity to be exported and add the intent-filter to make it the launch activity -->
+        <activity
+            android:name=".ChatRoom"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
