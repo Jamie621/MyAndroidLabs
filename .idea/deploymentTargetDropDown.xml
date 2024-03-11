@@ -18,14 +18,8 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-12T14:21:56.205945200Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-06T19:13:45.483013300Z" />
         </State>
-      </entry>
-      <entry key="testFindMissingDigit()">
-        <State />
-      </entry>
-      <entry key="testFindMissingLowerCase()">
-        <State />
       </entry>
       <entry key="testFindMissingSpecialCharacter()">
         <State />
