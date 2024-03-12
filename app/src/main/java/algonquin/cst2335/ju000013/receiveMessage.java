@@ -9,6 +9,6 @@ public class receiveMessage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.received_message); // Corrected layout file name
+        setContentView(R.layout.received_message);
     }
 }
