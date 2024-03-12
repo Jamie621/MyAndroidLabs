@@ -1,5 +1,6 @@
 package algonquin.cst2335.ju000013;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,8 +8,14 @@ import androidx.room.PrimaryKey;
 public class ChatMessage {
     @PrimaryKey(autoGenerate = true)
     private long id;
+
+    @ColumnInfo(name = "message")
     private String message;
+
+    @ColumnInfo(name = "time_sent")
     private String timeSent;
+
+    @ColumnInfo(name = "is_sent")
     private boolean isSent;
 
     public ChatMessage() {}
