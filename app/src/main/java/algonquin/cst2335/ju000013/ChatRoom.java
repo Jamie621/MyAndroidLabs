@@ -11,35 +11,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import algonquin.cst2335.ju000013.databinding.ActivityChatRoomBinding;
-import algonquin.cst2335.ju000013.databinding.SentMessageBinding;
+
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import algonquin.cst2335.ju000013.databinding.ReceivedMessageBinding;
+
 import androidx.room.Room;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import algonquin.cst2335.ju000013.databinding.ActivityChatRoomBinding;
 public class ChatRoom extends AppCompatActivity {
     private ActivityChatRoomBinding binding;
     private ChatRoomViewModel chatModel;
