@@ -2,4 +2,10 @@
     <string name="app_name">Jungmin\'s Android Labs</string>
     <string name="hello_message">Hello world!</string>
     <string name="button_message">I\'m a button</string>
+    <!-- New strings -->
+    <string name="type_a_message">Type a message</string>
+    <string name="receive">RECEIVE</string>
+    <string name="send">SEND</string>
+    <string name="message_goes_here">Message goes here</string>
+    <string name="time_goes_here">Time goes here</string>
 </resources>
