@@ -3,5 +3,12 @@
     <string name="app_name">Jungmin\'s Android Labs</string>
     <string name="hello_message">안녕 세상!</string>
     <string name="button_message">나는 버튼입니다.</string>
-
-</resources>
+    <!-- New strings -->
+<string name="type_a_message">메시지 종류</string>
+<string name="receive">받기</string>
+<string name="send">보내기</string>
+<string name="message_goes_here">메시지 입력 하세요</string>
+<string name="time_goes_here">시간은 여기에 보입니다.</string>
+    <string name="delete">삭제</string>
+    <string name="about">항목</string>
+    </resources>
