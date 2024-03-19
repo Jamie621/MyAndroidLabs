@@ -2,27 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainActivityTest2">
-        <State />
-      </entry>
       <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\jujun\.android\avd\Pixel_2_API_27.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-
-      <entry key="testFindMissingSpecialCharacter()">
-        <State />
-      </entry>
-      <entry key="testPasswordIsComplexEnough()">
         <State />
       </entry>
     </value>
