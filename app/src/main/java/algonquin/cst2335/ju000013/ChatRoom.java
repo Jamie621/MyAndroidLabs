@@ -28,43 +28,41 @@ import java.util.concurrent.Executors;
 
 import algonquin.cst2335.ju000013.databinding.ActivityChatRoomBinding;
 
+        /**
+        * The main activity class for the ChatRoom application, handling the user interface and interactions.
+        */
 public class ChatRoom extends AppCompatActivity {
-    private ActivityChatRoomBinding binding;
-    private ChatRoomViewModel chatModel;
-    private ChatAdapter myAdapter;
-    private ExecutorService executorService;
-    private ChatMessageDAO mDAO;
+    private ActivityChatRoomBinding binding; // Binding object for interacting with the layout views
+    private ChatRoomViewModel chatModel; // ViewModel for handling data related to chat messages
+    private ChatAdapter myAdapter; // Adapter for the RecyclerView that displays chat messages
+    private ExecutorService executorService; // ExecutorService for running database operations on a background thread
+    private ChatMessageDAO mDAO; // Data Access Object for accessing the chat messages database
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button,
+        // so long as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.item_delete) {
+            // Show a confirmation dialog to delete all messages
             new AlertDialog.Builder(this)
                     .setTitle("Delete all messages")
                     .setMessage("Are you sure you want to delete all messages?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        // Execute database operation in the background thread
+                        // Execute database operation to delete all messages on a background thread
                         executorService.execute(() -> {
-                            // Delete all messages from the database
                             mDAO.deleteAllMessages();
-
-                            // Update the UI on the main thread after deletion
                             runOnUiThread(() -> {
-                                // Clear the adapter's data set
                                 myAdapter.clearMessages();
-
-                                // Notify the adapter that data set has been changed
                                 myAdapter.notifyDataSetChanged();
-
-                                // Show a confirmation message
                                 Toast.makeText(this, "All messages deleted", Toast.LENGTH_SHORT).show();
                             });
                         });
@@ -73,6 +71,7 @@ public class ChatRoom extends AppCompatActivity {
                     .show();
             return true;
         } else if (id == R.id.item_about) {
+            // Show an "About" message
             Toast.makeText(this, "Version 1.0, created by Jungmin Ju", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -134,7 +133,6 @@ public class ChatRoom extends AppCompatActivity {
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Set the toolbar as the app bar for the activity
         setSupportActionBar(binding.myToolbar);
 
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
@@ -150,10 +148,18 @@ public class ChatRoom extends AppCompatActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        // Setup the listeners for the send and receive buttons
         binding.sendButton.setOnClickListener(v -> sendMessage(mDAO, sdf, true));
         binding.receiveButton.setOnClickListener(v -> sendMessage(mDAO, sdf, false));
     }
 
+    /**
+     * Sends a message, either sent by the user or received from others.
+     *
+     * @param mDAO The DAO to access the database.
+     * @param sdf  The SimpleDateFormat for formatting the date.
+     * @param isSent True if the message is sent by the user, false if received.
+     */
     private void sendMessage(ChatMessageDAO mDAO, SimpleDateFormat sdf, boolean isSent) {
         String messageText = binding.textInput.getText().toString();
         if (!messageText.isEmpty()) {
@@ -172,6 +178,9 @@ public class ChatRoom extends AppCompatActivity {
         }
     }
 
+    /**
+     * Loads messages from the database and displays them in the RecyclerView.
+     */
     private void loadMessages() {
         executorService.execute(() -> {
             List<ChatMessage> messages = mDAO.getAllMessages();
@@ -183,109 +192,94 @@ public class ChatRoom extends AppCompatActivity {
     }
 
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        executorService.shutdown();
-    }
-
-    class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyRowHolder> {
-        private List<ChatMessage> messages;
-
-        public ChatAdapter(List<ChatMessage> messages) {
-            this.messages = messages;
-        }
-
-        public void setMessages(List<ChatMessage> messages) {
-            this.messages = messages;
-        }
-
-        public void addMessage(ChatMessage message) {
-            this.messages.add(message);
-            notifyItemInserted(messages.size() - 1);
-        }
-
-        public void clearMessages() {
-            messages.clear();
-        }
-
-        public void removeMessage(int position) {
-            ChatMessage message = messages.get(position);
-            executorService.execute(() -> {
-                mDAO.deleteMessage(message);
-                runOnUiThread(() -> {
-                    messages.remove(position);
-                    notifyItemRemoved(position);
-                });
-            });
-        }
-
-        @NonNull
-        @Override
-        public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView;
-            if (viewType == 0) { // Sent message
-                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.sent_message, parent, false);
-            } else { // Received message
-                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.received_message, parent, false);
+            @Override
+            protected void onDestroy() {
+                super.onDestroy();
+                // Shutdown the ExecutorService to avoid memory leaks
+                executorService.shutdown();
             }
-            return new MyRowHolder(itemView);
-        }
 
-        @Override
-        public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-            ChatMessage chatMessage = messages.get(position);
-            holder.messageText.setText(chatMessage.getMessage());
-            holder.timeText.setText(chatMessage.getTimeSent());
-        }
+            /**
+             * Adapter class for managing the display of chat messages in a RecyclerView.
+             */
+            class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyRowHolder> {
+                private List<ChatMessage> messages; // List to hold chat messages
 
-        @Override
-        public int getItemCount() {
-            return messages.size();
-        }
+                public ChatAdapter(List<ChatMessage> messages) {
+                    this.messages = messages;
+                }
 
-        @Override
-        public int getItemViewType(int position) {
-            return messages.get(position).isSent() ? 0 : 1;
-        }
+                public void setMessages(List<ChatMessage> messages) {
+                    this.messages = messages;
+                    notifyDataSetChanged();
+                }
 
-        public class MyRowHolder extends RecyclerView.ViewHolder {
-            TextView messageText;
-            TextView timeText;
+                public void addMessage(ChatMessage message) {
+                    this.messages.add(message);
+                    notifyItemInserted(messages.size() - 1);
+                }
 
-            public MyRowHolder(View itemView) {
-                super(itemView);
-                messageText = itemView.findViewById(R.id.messageText);
-                timeText = itemView.findViewById(R.id.timeText);
+                public void clearMessages() {
+                    messages.clear();
+                    notifyDataSetChanged();
+                }
 
-                itemView.setOnClickListener(click -> {
-                    int position = getAbsoluteAdapterPosition();
+                @NonNull
+                @Override
+                public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    // Inflate the appropriate layout based on the message type (sent or received)
+                    View itemView = LayoutInflater.from(parent.getContext()).inflate(viewType == 0 ? R.layout.sent_message : R.layout.received_message, parent, false);
+                    return new MyRowHolder(itemView);
+                }
 
-                    new AlertDialog.Builder(itemView.getContext())
-                            .setMessage("Do you want to delete the message: " + messageText.getText())
-                            .setTitle("Question:")
-                            .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                            .setPositiveButton("Yes", (dialog, cl) -> {
-                                ChatMessage removedMessage = messages.get(position);
-                                messages.remove(position);
-                                ChatAdapter.this.notifyItemRemoved(position); // Corrected here
+                @Override
+                public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
+                    // Bind the message data to the view
+                    ChatMessage chatMessage = messages.get(position);
+                    holder.messageText.setText(chatMessage.getMessage());
+                    holder.timeText.setText(chatMessage.getTimeSent());
+                }
 
-                                Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
-                                        .setAction("Undo", clk -> {
-                                            messages.add(position, removedMessage);
-                                            ChatAdapter.this.notifyItemInserted(position); // Corrected here
-                                        })
-                                        .show();
-                            }).create().show();
+                @Override
+                public int getItemCount() {
+                    return messages.size();
+                }
 
+                @Override
+                public int getItemViewType(int position) {
+                    // Determine the view type based on whether the message was sent or received
+                    return messages.get(position).isSent() ? 0 : 1;
+                }
 
-                });
+                /**
+                 * ViewHolder class for holding views related to each individual chat message.
+                 */
+                public class MyRowHolder extends RecyclerView.ViewHolder {
+                    TextView messageText;
+                    TextView timeText;
+
+                    public MyRowHolder(View itemView) {
+                        super(itemView);
+                        messageText = itemView.findViewById(R.id.messageText);
+                        timeText = itemView.findViewById(R.id.timeText);
+
+                        itemView.setOnClickListener(click -> {
+                            int position = getAbsoluteAdapterPosition();
+                            new AlertDialog.Builder(itemView.getContext())
+                                    .setMessage("Do you want to delete this message?")
+                                    .setTitle("Confirm")
+                                    .setNegativeButton("No", null)
+                                    .setPositiveButton("Yes", (dialog, which) -> {
+                                        ChatMessage removedMessage = messages.remove(position);
+                                        notifyItemRemoved(position);
+                                        executorService.execute(() -> mDAO.deleteMessage(removedMessage));
+                                    })
+                                    .show();
+                        });
+                    }
+                }
             }
         }
-    }
-}
-
 
 
 
