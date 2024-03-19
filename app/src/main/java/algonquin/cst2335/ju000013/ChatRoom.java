@@ -1,28 +1,32 @@
 package algonquin.cst2335.ju000013;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
-import algonquin.cst2335.ju000013.databinding.ActivityChatRoomBinding;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
-import com.google.android.material.snackbar.Snackbar;
+import algonquin.cst2335.ju000013.databinding.ActivityChatRoomBinding;
 
 public class ChatRoom extends AppCompatActivity {
     private ActivityChatRoomBinding binding;
@@ -32,10 +36,106 @@ public class ChatRoom extends AppCompatActivity {
     private ChatMessageDAO mDAO;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item_delete) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete all messages")
+                    .setMessage("Are you sure you want to delete all messages?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Execute database operation in the background thread
+                        executorService.execute(() -> {
+                            // Delete all messages from the database
+                            mDAO.deleteAllMessages();
+
+                            // Update the UI on the main thread after deletion
+                            runOnUiThread(() -> {
+                                // Clear the adapter's data set
+                                myAdapter.clearMessages();
+
+                                // Notify the adapter that data set has been changed
+                                myAdapter.notifyDataSetChanged();
+
+                                // Show a confirmation message
+                                Toast.makeText(this, "All messages deleted", Toast.LENGTH_SHORT).show();
+                            });
+                        });
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        } else if (id == R.id.item_about) {
+            Toast.makeText(this, "Version 1.0, created by Jungmin Ju", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+   /* @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item_delete) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete all messages")
+                    .setMessage("Are you sure you want to delete all messages?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        // Your code to delete messages goes here
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        } else if (id == R.id.item_about) {
+            Toast.makeText(this, "Version 1.0, created by Jungmin Ju", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
+
+
+    /*@Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_delete:
+                // Confirmation dialog to delete messages
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete all messages")
+                        .setMessage("Are you sure you want to delete all messages?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            // Deletion code
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                return true;
+            case R.id.item_about:
+                // Display version and creator info
+                Toast.makeText(this, "Version 1.0, created by Jungmin Ju", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Set the toolbar as the app bar for the activity
+        setSupportActionBar(binding.myToolbar);
 
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         myAdapter = new ChatAdapter(new ArrayList<>());
@@ -82,6 +182,8 @@ public class ChatRoom extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -102,6 +204,10 @@ public class ChatRoom extends AppCompatActivity {
         public void addMessage(ChatMessage message) {
             this.messages.add(message);
             notifyItemInserted(messages.size() - 1);
+        }
+
+        public void clearMessages() {
+            messages.clear();
         }
 
         public void removeMessage(int position) {
@@ -186,7 +292,7 @@ public class ChatRoom extends AppCompatActivity {
 
 
 
-/*public class ChatRoom extends AppCompatActivity {
+/* public class ChatRoom extends AppCompatActivity {
     private ActivityChatRoomBinding binding;
     private ChatRoomViewModel chatModel;
     private ChatAdapter myAdapter;
