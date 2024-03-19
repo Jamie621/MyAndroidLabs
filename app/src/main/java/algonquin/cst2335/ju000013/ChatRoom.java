@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ChatRoom extends AppCompatActivity {
+    // Declare variables for binding, view model, adapter, executor service, and DAO
     private ActivityChatRoomBinding binding;
     private ChatRoomViewModel chatModel;
     private ChatAdapter myAdapter;
@@ -34,32 +35,40 @@ public class ChatRoom extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Inflate layout and set up view bindings
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Initialize view model, adapter, and RecyclerView
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         myAdapter = new ChatAdapter(new ArrayList<>());
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
         binding.recycleView.setAdapter(myAdapter);
 
+        // Set up executor service and Room database
         executorService = Executors.newSingleThreadExecutor();
         MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "chat_database").build();
         mDAO = db.cmDAO();
 
+        // Load messages from the database
         loadMessages();
 
+        // Initialize date formatter
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        // Set up button listeners for sending and receiving messages
         binding.sendButton.setOnClickListener(v -> sendMessage(mDAO, sdf, true));
         binding.receiveButton.setOnClickListener(v -> sendMessage(mDAO, sdf, false));
     }
 
+    // Method to send or receive a message
     private void sendMessage(ChatMessageDAO mDAO, SimpleDateFormat sdf, boolean isSent) {
         String messageText = binding.textInput.getText().toString();
         if (!messageText.isEmpty()) {
             String currentTime = sdf.format(new Date());
             ChatMessage message = new ChatMessage(messageText, currentTime, isSent);
 
+            // Insert message into the database and update UI
             executorService.execute(() -> {
                 long id = mDAO.insertMessage(message);
                 message.setId(id);
@@ -72,6 +81,7 @@ public class ChatRoom extends AppCompatActivity {
         }
     }
 
+    // Method to load messages from the database and display them
     private void loadMessages() {
         executorService.execute(() -> {
             List<ChatMessage> messages = mDAO.getAllMessages();
@@ -85,25 +95,29 @@ public class ChatRoom extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Clean up resources
         executorService.shutdown();
     }
 
+    // Inner class for the chat message adapter
     class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyRowHolder> {
         private List<ChatMessage> messages;
 
+        // Constructor for adapter
         public ChatAdapter(List<ChatMessage> messages) {
             this.messages = messages;
         }
 
+        // Methods to set and add messages to the adapter
         public void setMessages(List<ChatMessage> messages) {
             this.messages = messages;
         }
-
         public void addMessage(ChatMessage message) {
             this.messages.add(message);
             notifyItemInserted(messages.size() - 1);
         }
 
+        // Method to remove a message
         public void removeMessage(int position) {
             ChatMessage message = messages.get(position);
             executorService.execute(() -> {
@@ -115,6 +129,7 @@ public class ChatRoom extends AppCompatActivity {
             });
         }
 
+        // Inflate layout and return ViewHolder
         @NonNull
         @Override
         public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -127,6 +142,7 @@ public class ChatRoom extends AppCompatActivity {
             return new MyRowHolder(itemView);
         }
 
+        // Bind message data to ViewHolder
         @Override
         public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
             ChatMessage chatMessage = messages.get(position);
@@ -134,16 +150,19 @@ public class ChatRoom extends AppCompatActivity {
             holder.timeText.setText(chatMessage.getTimeSent());
         }
 
+        // Return the size of the messages list
         @Override
         public int getItemCount() {
             return messages.size();
         }
 
+        // Determine the type of view for messages
         @Override
         public int getItemViewType(int position) {
             return messages.get(position).isSent() ? 0 : 1;
         }
 
+        // ViewHolder class to hold message views
         public class MyRowHolder extends RecyclerView.ViewHolder {
             TextView messageText;
             TextView timeText;
@@ -153,9 +172,11 @@ public class ChatRoom extends AppCompatActivity {
                 messageText = itemView.findViewById(R.id.messageText);
                 timeText = itemView.findViewById(R.id.timeText);
 
+                // Set up click listener for message deletion
                 itemView.setOnClickListener(click -> {
                     int position = getAbsoluteAdapterPosition();
 
+                    // Confirm deletion with AlertDialog
                     new AlertDialog.Builder(itemView.getContext())
                             .setMessage("Do you want to delete the message: " + messageText.getText())
                             .setTitle("Question:")
@@ -163,23 +184,21 @@ public class ChatRoom extends AppCompatActivity {
                             .setPositiveButton("Yes", (dialog, cl) -> {
                                 ChatMessage removedMessage = messages.get(position);
                                 messages.remove(position);
-                                ChatAdapter.this.notifyItemRemoved(position); // Corrected here
+                                ChatAdapter.this.notifyItemRemoved(position);
 
+                                // Provide undo option with Snackbar
                                 Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
                                         .setAction("Undo", clk -> {
                                             messages.add(position, removedMessage);
-                                            ChatAdapter.this.notifyItemInserted(position); // Corrected here
+                                            ChatAdapter.this.notifyItemInserted(position);
                                         })
                                         .show();
                             }).create().show();
-
-
                 });
             }
         }
     }
 }
-
 
 
 
