@@ -9,6 +9,6 @@
     <string name="message_goes_here">Message goes here</string>
     <string name="time_goes_here">Time goes here</string>
     <string name="delete">Delete</string>
-    <string name="about">Item</string>
+    <string name="about">About</string>
 
 </resources>
